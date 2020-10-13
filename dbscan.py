@@ -51,6 +51,18 @@ def main():
         print("--")
         print(np.linalg.norm(dataA.iloc[1,0:3]-dataA.iloc[i,0:3]))
     
+
+    tree2 = KDTree(data.iloc[:,0:4].values)
+    ind2 = tree2.query_ball_point(data.iloc[1,0:4], r=0.3) #returns a list if only on epoint is queried
+
+    for i in ind2:
+        print(data.iloc[i,0:4])
+        print("--")
+        print(np.linalg.norm(data.iloc[1,0:4]-data.iloc[i,0:4]))
+    
+
+
+
 if __name__ == "__main__":
     main()
 
