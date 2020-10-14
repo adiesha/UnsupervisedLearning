@@ -35,8 +35,20 @@ def dbscan(data, k, eps, minpts):
         neighbourhood.remove(i)
         print(neighbourhood)
         print("&&&&&&&&&&&")
-        seedset
-        for j in see
+        seedset = neighbourhood
+        j = 0
+        while j < len(seedset):
+            q = seedset[j]
+            if data.iloc[q][labelcolumn] == -1:
+                data._set_value(q, labelcolumn, c)
+            if data.iloc[q][labelcolumn] == 0:
+                continue
+            data._set_value(q, labelcolumn, c)
+            neighbours = neighbourhoodtree.query_ball_point(data.iloc[q, 0:k], r=eps)
+            if len(neighbours) >= minpts:
+                for k in neighbours:
+                    seedset.append(k) if k not in seedset else seedset
+
 
 
     for i in data.index:
