@@ -58,48 +58,12 @@ def dbscan(data, k, eps, minpts):
 
 def main():
     data = pd.read_csv('iris.data', header=None)
-    k = 4
-    #  print(df.columns)
-    # Added empty column for labels
-    data[len(data.columns)] = np.nan
-    dataA = pd.DataFrame(pd.np.random.rand(100, 3))
-    dataA[3] = np.nan
-    print(dataA.head())
-    print(dataA.values)
-    print("*******")
-    print(dataA.iloc[0, 0:3].values)
+    result = dbscan(data, 4, 0.5, 6)
+    result.to_csv('iris.data.result.csv', index=False)
 
-    # tree = KDTree(dataA.values)
-    # ind = tree.query_ball_point(dataA[:1], r=0.3) #returns a list if only on epoint is queried
-
-    tree = KDTree(dataA.iloc[:, 0:3].values)
-    ind = tree.query_ball_point(dataA.iloc[1, 0:3], r=0.3)  # returns a list if only on epoint is queried
-
-    print("+++++++++++++++")
-    print(ind)
-    print(type(ind))
-    print(len(ind))
-    print("+++++++++++++++")
-    print("+++++++++++++++")
-    print(dataA[:1])
-
-    # for i in ind[0]:
-    #     print(dataA.iloc[i])
-    #     print("--")
-    #     print(np.linalg.norm(dataA[:1]-dataA.iloc[i]))
-
-    for i in ind:
-        print(dataA.iloc[i, 0:3])
-        print("--")
-        print(np.linalg.norm(dataA.iloc[1, 0:3] - dataA.iloc[i, 0:3]))
-
-    tree2 = KDTree(data.iloc[:, 0:4].values)
-    ind2 = tree2.query_ball_point(data.iloc[1, 0:4], r=0.3)  # returns a list if only on epoint is queried
-
-    for i in ind2:
-        print(data.iloc[i, 0:4])
-        print("--")
-        print(np.linalg.norm(data.iloc[1, 0:4] - data.iloc[i, 0:4]))
+    data2 = pd.read_csv('Synthetic_Values.csv', header=None)
+    result2 = dbscan(data2, 2, 10, 6)
+    result2.to_csv('sysnthetic.data.result.csv', index=False)
 
 
 def test():
@@ -140,18 +104,13 @@ def test():
         print(np.linalg.norm(dataA.iloc[1, 0:3] - dataA.iloc[i, 0:3]))
 
     tree2 = KDTree(data.iloc[:, 0:4].values)
-    ind2 = tree2.query_ball_point(data.iloc[3, 0:4], r=0.3)  # returns a list if only on epoint is queried
+    ind2 = tree2.query_ball_point(data.iloc[3, 0:4], r=0.3)  # returns a list if only if point is queried
 
     for i in ind2:
         print(data.iloc[i, 0:4])
         print("--")
         print(np.linalg.norm(data.iloc[3, 0:4] - data.iloc[i, 0:4]))
 
-    data = pd.read_csv('iris.data', header=None)
-    result = dbscan(data, 4, 0.4, 10)
-    result.to_csv('result.csv', index=False)
-
 
 if __name__ == "__main__":
-    test()
-    # main()
+    main()
