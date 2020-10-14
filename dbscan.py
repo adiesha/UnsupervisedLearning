@@ -22,17 +22,17 @@ def dbscan(data, k, eps, minpts):
         if data.iloc[i][labelcolumn] != 0:
             continue
         neighbourhood = neighbourhoodtree.query_ball_point(data.iloc[i, 0:k], r=eps)
-        print(len(neighbourhood))
+        # print(len(neighbourhood))
         if len(neighbourhood) < minpts:
             data._set_value(i, labelcolumn, -1)
             continue
         c = c + 1
         data._set_value(i, labelcolumn, c)
         # remove the i from neighbourhood list to create the seedset
-        print(neighbourhood)
+        # print(neighbourhood)
         neighbourhood.remove(i)
-        print(neighbourhood)
-        print("&&&&&&&&&&&")
+        # print(neighbourhood)
+        # print("&&&&&&&&&&&")
         seedset = neighbourhood
         j = 0
         while j < len(seedset):
@@ -49,21 +49,21 @@ def dbscan(data, k, eps, minpts):
                     seedset.append(m) if m not in seedset else seedset
             j = j + 1
 
-    print(":::::::::::")
-    for i in data.index:
-        print(data.iloc[i][labelcolumn])
+    # print(":::::::::::")
+    # for i in data.index:
+    #     print(data.iloc[i][labelcolumn])
 
     return data
 
 
 def main():
     data = pd.read_csv('iris.data', header=None)
-    result = dbscan(data, 4, 0.5, 6)
-    result.to_csv('iris.data.result.csv', index=False)
+    result = dbscan(data, 4, 0.485, 6)
+    result.to_csv('iris.data.result.csv', index=False, header=False)
 
     data2 = pd.read_csv('Synthetic_Values.csv', header=None)
     result2 = dbscan(data2, 2, 10, 6)
-    result2.to_csv('sysnthetic.data.result.csv', index=False)
+    result2.to_csv('sysnthetic.data.result.csv', index=False, header=False)
 
 
 def test():
