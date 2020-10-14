@@ -1,8 +1,6 @@
-import itertools
-from itertools import chain, combinations
-from scipy.spatial import KDTree
 import numpy as np
 import pandas as pd
+from scipy.spatial import KDTree
 
 
 def dbscan(data, k, eps, minpts):
@@ -41,18 +39,21 @@ def dbscan(data, k, eps, minpts):
             q = seedset[j]
             if data.iloc[q][labelcolumn] == -1:
                 data._set_value(q, labelcolumn, c)
-            if data.iloc[q][labelcolumn] == 0:
+            if data.iloc[q][labelcolumn] != 0:
+                j = j + 1
                 continue
             data._set_value(q, labelcolumn, c)
             neighbours = neighbourhoodtree.query_ball_point(data.iloc[q, 0:k], r=eps)
             if len(neighbours) >= minpts:
-                for k in neighbours:
-                    seedset.append(k) if k not in seedset else seedset
+                for m in neighbours:
+                    seedset.append(m) if m not in seedset else seedset
+            j = j + 1
 
-
-
+    print(":::::::::::")
     for i in data.index:
         print(data.iloc[i][labelcolumn])
+
+    return data
 
 
 def main():
@@ -146,7 +147,9 @@ def test():
         print("--")
         print(np.linalg.norm(data.iloc[3, 0:4] - data.iloc[i, 0:4]))
 
-    dbscan(data, 4, 0.4, 10)
+    data = pd.read_csv('iris.data', header=None)
+    result = dbscan(data, 4, 0.4, 10)
+    result.to_csv('result.csv', index=False)
 
 
 if __name__ == "__main__":
