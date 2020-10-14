@@ -3,6 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from generate_polygon import polygon_shape
 
+random.seed(42)
+
 
 class DataWithLabel:
 
@@ -60,6 +62,13 @@ class DataWithLabel:
             self.data.append((x, y))
             self.label.append(0)
             i += 1
+            
+        noise_start_idx = estimate_points * self.num_poly - 1
+        
+        for tmp in range(noise_start_idx, self.num_points - 1):
+            for poly in range(len(polygons)):
+                if polygons[poly].contains_point(self.data[tmp]):
+                    self.label[tmp] = poly
             
         return polygons
 
