@@ -26,6 +26,7 @@ def k_means(df, K, epsilon):
     # print(D_min)
 
     # Initailization according to K-means++
+    # ref : https://www.geeksforgeeks.org/ml-k-means-algorithm/
     for k in range(K):
         if k ==0 :
             mu[k, :] = D_min[0:dim]+(D_max[0:dim] - D_min[0:dim])*rand(dim)
@@ -114,18 +115,35 @@ def k_means(df, K, epsilon):
         #
         # print("Mean error norm")
         # print(np.linalg.norm(np.subtract(mu, mu_old), ord=2, axis=1)**2)
-        print("SSE")
+        print("SSE(mu)")
         print(sum(np.linalg.norm(np.subtract(mu, mu_old), ord=2, axis=1) ** 2))
         if sum(np.linalg.norm(np.subtract(mu, mu_old), ord=2, axis=1) ** 2) <= epsilon:
             print("Number of iterations")
             print(t)
-            return C
+            D[dim+1] = C
+            return D
             break
 
 def main():
     print('**************Hello*********')
 
+    k = 3
+    epsilon = 0.001
+    epochs = 5
 
+    data = pd.read_csv('iris.data', header=None)
+    result = k_means(data, k, epsilon)
+    result.to_csv('iris.data.result.k_means.csv', index=False, header=False)
+
+    data2 = pd.read_csv('Synthetic_Data_Label.csv', header=None)
+    result2 = k_means(data2, k, epsilon)
+    result2.to_csv('sysnthetic.data.result.k_means.csv', index=False, header=False)
+
+
+
+
+
+def test():
     df = pd.read_csv('iris.data', header=None)
     print(df.describe())
     # print(df[0])
@@ -137,5 +155,7 @@ def main():
     k_means(df, k, epsilon)
 
     print("k means done")
+
+
 if __name__ == "__main__":
     main()
