@@ -81,8 +81,8 @@ val = abc.label
 # save the data and labels
 df_data = pd.DataFrame(check)
 df_label = pd.DataFrame(val)
-df_data.to_csv('Synthetic_Values.csv', index = False, header=False)
-df_label.to_csv('Synthetic_Values_Labels.csv', index = False, header=False)
+data = pd.concat([df_data, df_label], axis = 1)
+data.to_csv('Synthetic_Data_Label.csv', index = False, header = False)
 
 # display the figure, and save it
 plt.axes()
