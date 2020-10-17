@@ -59,11 +59,11 @@ def dbscan(data, k, eps, minpts):
 def main():
     data = pd.read_csv('iris.data', header=None)
     result = dbscan(data, 4, 0.485, 6)
-    result.to_csv('iris.data.result.csv', index=False, header=False)
+    result.to_csv('iris.data.dbscan.result.csv', index=False, header=False)
 
-    data2 = pd.read_csv('Synthetic_Values.csv', header=None)
-    result2 = dbscan(data2, 2, 10, 6)
-    result2.to_csv('sysnthetic.data.result.csv', index=False, header=False)
+    data2 = pd.read_csv('Synthetic_Data_Label.csv', header=None)
+    result2 = dbscan(data2, 2, 16, 3)
+    result2.to_csv('sysnthetic.data.dbscan.result.csv', index=False, header=False)
 
 
 def test():

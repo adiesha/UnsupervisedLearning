@@ -3,13 +3,21 @@ import pandas as pd
 
 
 def main():
-    data = pd.read_csv('iris.data.result.csv', header=None)
+    data = pd.read_csv('iris.data.dbscan.result.csv', header=None)
     data[len(data.columns)] = data.index
-    assessment(data, 5, 6)
-
-    sill = silhouettecofficient(data, 5, 4)
+    print("printing assessment metrics of iris data on dbscan")
+    puri = purity(data, 5, 6)
+    print(puri)
+    sill = silhouettecofficient(data, 6, 4)
     print(sill)
 
+    data2 = pd.read_csv('sysnthetic.data.dbscan.result.csv', header=None)
+    data2[len(data2.columns)] = data2.index
+    print("printing assessment metrics of synthetic data on dbscan")
+    puri = purity(data2, 3, 4)
+    print(puri)
+    sill = silhouettecofficient(data2, 4, 2)
+    print(sill)
 
 def test():
     print("Test")
@@ -52,7 +60,7 @@ def purity(data, truthColumn, labelColumn):
         puritySum = puritySum + count
 
     purity = puritySum / data.shape[0]
-    print(purity)
+
     return purity
 
 
@@ -106,7 +114,7 @@ def calculateUin(index, cluster, data, kn):
             sum = sum + np.linalg.norm(baseTuple - tempTuple)
 
     result = sum / (len(cluster) - 1)
-    print(result)
+    # print(result)
     return result
 
 
