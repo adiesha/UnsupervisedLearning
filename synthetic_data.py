@@ -73,7 +73,7 @@ class DataWithLabel:
         return polygons
 
 
-abc = DataWithLabel(6, [0, 500], [0, 500], 5000)
+abc = DataWithLabel(6, [0, 500], [0, 500], 1000)
 polygon_all = abc.artificial_data()
 check = abc.data
 val = abc.label
