@@ -10,7 +10,7 @@ def polygon_shape(num_poly, x_range, y_range):
     area = x_dist * y_dist
     max_area = area / num_poly
     max_radius = int(math.sqrt(max_area / math.pi))
-    print(max_radius)
+    # print(max_radius)
 
     center_x_range = [x_range[0] + int(max_radius * 0.6), x_range[1] - int(max_radius * 0.6)]
     center_y_range = [y_range[0] + int(max_radius * 0.6), y_range[1] - int(max_radius * 0.6)]
@@ -19,7 +19,7 @@ def polygon_shape(num_poly, x_range, y_range):
     a.best_option()
     random_centers = a.points
     radius = a.radius
-    print(radius)
+    # print(radius)
 
     polygon = []
     for index in range(num_poly):

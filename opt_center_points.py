@@ -65,7 +65,7 @@ class OptimizedCenters:
             min_dist.append(min(tmp))
 
         max_dist = max(min_dist)
-        print(max_dist)
+        # print(max_dist)
         max_dist_idx = min_dist.index(max_dist)
 
         self.points = self.centers[max_dist_idx]

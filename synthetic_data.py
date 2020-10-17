@@ -85,18 +85,18 @@ data = pd.concat([df_data, df_label], axis = 1)
 data.to_csv('Synthetic_Data_Label.csv', index = False, header = False)
 
 # display the figure, and save it
-plt.axes()
-x_points = []
-y_points = []
-for points in check:
-    x_points.append(points[0])
-    y_points.append(points[1])
-plt.plot(x_points, y_points, 'ro')
-for poly in polygon_all:
-    points = poly
-    polygon = plt.Polygon(points)
-    plt.gca().add_patch(polygon)
+# plt.axes()
+# x_points = []
+# y_points = []
+# for points in check:
+#     x_points.append(points[0])
+#     y_points.append(points[1])
+# plt.plot(x_points, y_points, 'ro')
+# for poly in polygon_all:
+#     points = poly
+#     polygon = plt.Polygon(points)
+#     plt.gca().add_patch(polygon)
 
-plt.axis('scaled')
-plt.show()
-plt.savefig('Synthetic_Data_Image.png')
+# plt.axis('scaled')
+# plt.show()
+# plt.savefig('Synthetic_Data_Image.png')
