@@ -73,16 +73,24 @@ class DataWithLabel:
         return polygons
 
 
-abc = DataWithLabel(6, [0, 500], [0, 500], 1000)
-polygon_all = abc.artificial_data()
-check = abc.data
-val = abc.label
+def generate_data():
+    abc = DataWithLabel(6, [0, 500], [0, 500], 1000)
+    # polygon_all = abc.artificial_data()   # was used to generate figure
+    abc.artificial_data()
+    check = abc.data
+    val = abc.label
+    
+    # save the data and labels
+    df_data = pd.DataFrame(check)
+    df_label = pd.DataFrame(val)
+    data = pd.concat([df_data, df_label], axis = 1)
+    data.to_csv('Synthetic_Data_Label.csv', index = False, header = False)
+    print("Synthetic Data Generation Complete")
 
-# save the data and labels
-df_data = pd.DataFrame(check)
-df_label = pd.DataFrame(val)
-data = pd.concat([df_data, df_label], axis = 1)
-data.to_csv('Synthetic_Data_Label.csv', index = False, header = False)
+
+if __name__ == "__main__":
+    generate_data()
+
 
 # display the figure, and save it
 # plt.axes()
