@@ -37,7 +37,7 @@ class DataWithLabel:
         ymin = [self.y_range[0] if i <= self.y_range[0] else i for i in ymin]
         ymax = [self.y_range[1] if i >= self.y_range[1] else i for i in ymax]
             
-        estimate_points = int(self.num_points / (self.num_poly + 1))
+        estimate_points = int(self.num_points / (self.num_poly + 3))
         noise_points = self.num_points - (estimate_points * self.num_poly)
         
         for poly in range(len(polygons)):
@@ -73,38 +73,47 @@ class DataWithLabel:
         return polygons
 
 
-def generate_data():
-    abc = DataWithLabel(6, [0, 500], [0, 500], 1000)
-    # polygon_all = abc.artificial_data()   # was used to generate figure
-    abc.artificial_data()
-    check = abc.data
-    val = abc.label
-    
-    # save the data and labels
-    df_data = pd.DataFrame(check)
-    df_label = pd.DataFrame(val)
-    data = pd.concat([df_data, df_label], axis = 1)
-    data.to_csv('Synthetic_Data_Label.csv', index = False, header = False)
-    print("Synthetic Data Generation Complete")
+# def generate_data():
+abc = DataWithLabel(5, [0, 500], [0, 500], 700)
+polygon_all = abc.artificial_data()   # was used to generate figure
+# abc.artificial_data()
+check = abc.data
+val = abc.label
+
+# count = 0
+# for j in range(len(abc.label)):
+#     if abc.label[j] == 0:
+#         count += 1
+
+# print(count)
+
+# save the data and labels
+df_data = pd.DataFrame(check)
+df_label = pd.DataFrame(val)
+data = pd.concat([df_data, df_label], axis = 1)
+data.to_csv('Synthetic_Data_Label.csv', index = False, header = False)
+# data.to_csv('Synthetic_700S_179N.csv', index = False, header = False)
+print("Synthetic Data Generation Complete")
 
 
-if __name__ == "__main__":
-    generate_data()
+# if __name__ == "__main__":
+#     generate_data()
 
 
 # display the figure, and save it
-# plt.axes()
-# x_points = []
-# y_points = []
-# for points in check:
-#     x_points.append(points[0])
-#     y_points.append(points[1])
-# plt.plot(x_points, y_points, 'ro')
-# for poly in polygon_all:
-#     points = poly
-#     polygon = plt.Polygon(points)
-#     plt.gca().add_patch(polygon)
+plt.axes()
+x_points = []
+y_points = []
+for points in check:
+    x_points.append(points[0])
+    y_points.append(points[1])
+plt.plot(x_points, y_points, 'ro')
+for poly in polygon_all:
+    points = poly
+    polygon = plt.Polygon(points)
+    plt.gca().add_patch(polygon)
 
-# plt.axis('scaled')
-# plt.show()
-# plt.savefig('Synthetic_Data_Image.png')
+plt.axis('scaled')
+plt.show()
+plt.savefig('Synthetic_Data_Image.png')
+# plt.savefig('Synthetic_700S_179N.png')
