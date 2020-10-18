@@ -17,7 +17,7 @@ def main():
     puri = purity(data2, 3, 4)
     print(puri)
     sill = silhouettecofficient(data2, 4, 2)
-    print(sill)
+    print(sill[0])
 
 def test():
     print("Test")
@@ -66,6 +66,7 @@ def silhouettecofficient(data, labelColumn, kn):
 
     uIn = np.zeros(data.shape[0])
     uOut = np.zeros(data.shape[0])
+    sI = np.zeros(data.shape[0])
     for i in clusterList:
         for j in i:
             uIn[j] = calculateUin(j, i, data, kn)
@@ -73,11 +74,12 @@ def silhouettecofficient(data, labelColumn, kn):
 
     result = 0
     for index in range(0, data.shape[0]):
+        sI[index] = (uOut[index] - uIn[index]) / max(uOut[index], uIn[index])
         result = result + (uOut[index] - uIn[index]) / max(uOut[index], uIn[index])
 
     result = result / data.shape[0]
-
-    return result
+    data[len(data.columns)] = pd.Series(sI)
+    return result, sI
 
 
 def calculateUout(index, cluster, clusterList, data, kn):
@@ -96,7 +98,7 @@ def calculateUout(index, cluster, clusterList, data, kn):
         if result < minDistance:
             minDistance = result
 
-    return minDistance
+    return 1000000 if minDistance == np.inf else minDistance
 
 
 def calculateUin(index, cluster, data, kn):
