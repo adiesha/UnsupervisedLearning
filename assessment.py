@@ -3,21 +3,22 @@ import pandas as pd
 
 
 def main():
-    data = pd.read_csv('iris.data.dbscan.result.csv', header=None)
-    data[len(data.columns)] = data.index
-    print("printing assessment metrics of iris data on dbscan")
-    puri = purity(data, 5, 6)
-    print(puri)
-    sill = silhouettecofficient(data, 6, 4)
-    print(sill)
-
-    data2 = pd.read_csv('sysnthetic.data.dbscan.result.csv', header=None)
-    data2[len(data2.columns)] = data2.index
-    print("printing assessment metrics of synthetic data on dbscan")
-    puri = purity(data2, 3, 4)
-    print(puri)
-    sill = silhouettecofficient(data2, 4, 2)
-    print(sill)
+    #   data = pd.read_csv('iris.data.dbscan.result.csv', header=None)
+    # data[len(data.columns)] = data.index
+    # print("printing assessment metrics of iris data on dbscan")
+    # puri = purity(data, 5, 6)
+    # print(puri)
+    # sill = silhouettecofficient(data, 6, 4)
+    # print(sill)
+    #
+    # data2 = pd.read_csv('sysnthetic.data.dbscan.result.csv', header=None)
+    # data2[len(data2.columns)] = data2.index
+    # print("printing assessment metrics of synthetic data on dbscan")
+    # puri = purity(data2, 3, 4)
+    # print(puri)
+    # sill = silhouettecofficient(data2, 4, 2)
+    # print(sill)
+    pass
 
 def test():
     print("Test")
@@ -26,11 +27,7 @@ def test():
     print(unique)
     data[len(data.columns)] = data.index
     data.to_csv('test.scv', index=False, header=False)
-    assessment(data, 5, 6)
-
-
-def assessment(data, truthColumn, labelColumn):
-    externamIndex = purity(data, truthColumn, labelColumn)
+    # assessment(data, 5, 6)
 
 
 def purity(data, truthColumn, labelColumn):
@@ -38,15 +35,15 @@ def purity(data, truthColumn, labelColumn):
 
     indexColumn = len(data.columns) - 1
     groundTruthList = data.groupby(truthColumn - 1)[indexColumn].apply(list).values.tolist()
-    print(groundTruthList)
+    # print(groundTruthList)
     groundTruthListCount = len(groundTruthList)
-    print(groundTruthListCount)
+    # print(groundTruthListCount)
 
     # create the cluster list
     clusterList = data.groupby(labelColumn - 1)[indexColumn].apply(list).values.tolist()
-    print(clusterList)
+    # print(clusterList)
     clusterListCount = len(groundTruthList)
-    print(clusterListCount)
+    # print(clusterListCount)
 
     puritySum = 0
     for i in clusterList:
