@@ -61,8 +61,8 @@ def main():
     result = dbscan(data, 4, 0.485, 6)
     result.to_csv('iris.data.dbscan.result.csv', index=False, header=False)
 
-    data2 = pd.read_csv('Synthetic_Data_Label.csv', header=None)
-    result2 = dbscan(data2, 2, 16, 3)
+    data2 = pd.read_csv('Synthetic_500S_99N.csv', header=None)
+    result2 = dbscan(data2, 2, 25.7, 5)
     result2.to_csv('sysnthetic.data.dbscan.result.csv', index=False, header=False)
 
 
