@@ -4,19 +4,19 @@ from itertools import chain, combinations
 import numpy as np
 import pandas as pd
 
+from assessment import silhouettecofficient
+import assessment as assessment
+
 from numpy.random import rand
 
 
 def k_means(df, K, epsilon):
 
     D = df.copy()
-    t = 0
-    dim = len(D.columns)-1
-    N_t = len(D.index)
-    # print("Number of txn")
-    # print (N_t)
-    print("Number of classes")
-    print(K)
+    t = 0                           # iteration number
+    dim = len(D.columns)-1          # number of attributes
+    N_t = len(D.index)              # number of samples
+
     mu = np.zeros(shape=(K, dim))
 
 
@@ -43,100 +43,105 @@ def k_means(df, K, epsilon):
             mu[k, :] = xj_max[0:dim]
 
 
-    print("Initial Mean")
-    print(mu)
+    # print("Initial Mean")
+    # print(mu)
 
 
     while True:
-        print("iteration")
+        # print("iteration")
         t = t+1
-        print(t)
+        # print(t)
+        # Creating a empty Dataframe for cluster assignment
+        C = pd.DataFrame(np.zeros(shape=(N_t, 1)), columns=["Kmeans_Class"], dtype=int)
 
-        C = pd.DataFrame(np.zeros(shape=(N_t, 1)), columns=["Kmeans_Class"])
-
-        # print("Mu old")
         mu_old = mu.copy()
-        # print(mu_old)
 
         # Cluster Assignment step
         for j in range(N_t) :
-            # print("Calculating for j =")
-            # print(j)
-
             xj = D.iloc[j].values
-
-            # print("X_j values")
-            # print(xj[0:dim])
-
 
             res = np.zeros(shape=(1,K))
             for k in range(K):
-                # print("Calculating for class k=")
-                # print(k)
-                # print("mean value")
-                # print(mu[k])
 
                 err_k = xj[0:dim] - mu[k, :]
-                # print("error in k")
-                # print(err_k)
                 res[0, k] = np.linalg.norm(err_k, ord=2)**2
-                # print("residual")
-                # print(res)
 
-            i_star = np.argmin(res)+1
-            # print("i_star")
-            # print(i_star)
+            i_star = int(np.argmin(res)+1)
 
             C.iloc[j] = i_star
 
         # Centroid update
         for k in range(K):
-            # print("Kth cluster k=")
-            # print(k)
             idx_k = C.loc[C['Kmeans_Class']==k+1].index
-            # print("Class indexes")
-            # print(idx_k)
 
             if len(idx_k) != 0:
                 c_k = D.iloc[idx_k.values]
-                # print("C_k ")
-                # print(c_k)
-
-                # print("cluster mean")
-                # print(c_k.mean())
-
                 mu[k, :] = c_k.mean()[0:dim]
 
-        # print("New mean")
-        # print(mu)
 
-        # print("Mean error")
-        # print(np.subtract(mu, mu_old))
-        #
-        # print("Mean error norm")
-        # print(np.linalg.norm(np.subtract(mu, mu_old), ord=2, axis=1)**2)
-        print("SSE(mu)")
-        print(sum(np.linalg.norm(np.subtract(mu, mu_old), ord=2, axis=1) ** 2))
         if sum(np.linalg.norm(np.subtract(mu, mu_old), ord=2, axis=1) ** 2) <= epsilon:
-            print("Number of iterations")
-            print(t)
+            # print("Number of iterations")
+            # print(t)
+            # print("SSE(mu)")
+            # print(sum(np.linalg.norm(np.subtract(mu, mu_old), ord=2, axis=1) ** 2))
             D[dim+1] = C
             return D
             break
 
-def main():
-    print('**************Hello*********')
+def K_means_w_epochs(data, K, epsilon, epochs):
+    print("K =")
+    print(K)
+    print("epsilon =")
+    print(epsilon)
 
-    k = 3
-    epsilon = 0.001
-    epochs = 5
+    dim = len(data.columns) - 1
+    sil_v = -1
+
+    for epc in range(epochs):
+        print("Epochs =")
+        print(epc)
+        out_epoch = k_means(data, K, epsilon)
+        out_epoch[len(out_epoch.columns)] = out_epoch.index
+        sill_temp = silhouettecofficient(out_epoch, dim + 2, dim)
+        print("silhouete")
+        print(sill_temp[0])
+        if sil_v < sill_temp[0]:
+            sil_v = sill_temp[0]
+            sil_best_epoch = sill_temp
+            result_best_epoch = out_epoch
+    return result_best_epoch, sil_best_epoch
+
+def K_means_find_parameters(data, kRange, epsRange, epochs):
+
+
+    sil_metric = np.zeros([len(kRange), len(epsRange)])
+    for k in range(len(kRange)):
+        for e in range(len(epsRange)):
+            out, sil = K_means_w_epochs(data, kRange[k], epsRange[e], epochs)
+            if all(sil_metric < sil[0]):
+                result_best = out
+                # sil_best = sil
+            sil_metric[k, e] = sil[0]
+    print(sil_metric)
+    return result_best
+
+
+
+
+def main():
+    print('**************K means*********')
+
+    kRange = [2, 3, 4, 5, 6, 7, 8, 9]
+    epsRange = [0.1]
+    epochs = 3
 
     data = pd.read_csv('iris.data', header=None)
-    result = k_means(data, k, epsilon)
+    result = K_means_find_parameters(data, kRange, epsRange, epochs)
     result.to_csv('iris.data.result.k_means.csv', index=False, header=False)
 
-    data2 = pd.read_csv('Synthetic_Data_Label.csv', header=None)
-    result2 = k_means(data2, k, epsilon)
+    # data2 = pd.read_csv('Synthetic_Data_Label.csv', header=None)
+    data2 = pd.read_csv('Synthetic_500S_66N.csv',header=None)
+    result2 = K_means_find_parameters(data2, kRange, epsRange, epochs)
     result2.to_csv('sysnthetic.data.result.k_means.csv', index=False, header=False)
 
 
