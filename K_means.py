@@ -98,17 +98,19 @@ def K_means_w_epochs(data, K, epsilon, epochs):
     sil_v = -1
 
     for epc in range(epochs):
-        print("Epochs =")
-        print(epc)
+        # print("Epochs =")
+        # print(epc)
         out_epoch = k_means(data, K, epsilon)
         out_epoch[len(out_epoch.columns)] = out_epoch.index
         sill_temp = silhouettecofficient(out_epoch, dim + 2, dim)
-        print("silhouete")
-        print(sill_temp[0])
+        # print("silhouete")
+        # print(sill_temp[0])
         if sil_v < sill_temp[0]:
             sil_v = sill_temp[0]
             sil_best_epoch = sill_temp
             result_best_epoch = out_epoch
+    # print("Best silhouete")
+    # print(sil_best_epoch[0])
     return result_best_epoch, sil_best_epoch
 
 def K_means_find_parameters(data, kRange, epsRange, epochs):
@@ -140,7 +142,7 @@ def main():
     result.to_csv('iris.data.result.k_means.csv', index=False, header=False)
 
     # data2 = pd.read_csv('Synthetic_Data_Label.csv', header=None)
-    data2 = pd.read_csv('Synthetic_500S_66N.csv',header=None)
+    data2 = pd.read_csv('Synthetic_500S_66N.csv', header=None)
     result2 = K_means_find_parameters(data2, kRange, epsRange, epochs)
     result2.to_csv('sysnthetic.data.result.k_means.csv', index=False, header=False)
 

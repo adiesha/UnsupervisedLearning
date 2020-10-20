@@ -9,19 +9,23 @@ import matplotlib.pyplot as plt
 def main():
     print("Running Iris data Experiments")
     parameters = [(2, 0.01), (3, 0.01), (4, 0.01), (5, 0.01), (6, 0.01)]
+
+    epochs = 3
+
     index = 0
     for parameter in parameters:
         plt.close('all')
         data = pd.read_csv('iris.data', header=None)
-        # result = dbscan.dbscan(data, 4, parameter[0], parameter[1])
-        result =  K_means.k_means(data, parameter[0], parameter[1])
+
+        result, _ = K_means.K_means_w_epochs(data, parameter[0], parameter[1], epochs)
         result[len(result.columns)] = result.index
         clusterDetatails(result, 5, 6, parameter[0], parameter[1])
         puri = assessment.purity(result, 5, 6)
         print("purity: " + str(puri))
         sill = assessment.silhouettecofficient(result, 6, 4)
         print("Silhoutte Coeff: " + str(sill[0]))
-        result = result.sort_values(5)
+
+        result = result.sort_values([5, len(result.columns) - 1], ascending=(True, False))
         result = result.reset_index(drop=True)
         # print(result.head())
         plt.figure()
@@ -39,11 +43,12 @@ def main():
                      ('Synthetic_700S_179N.csv', 24.7, 6)]
     index = 0
 
-    kRange = [2, 3, 4, 5, 6, 7, 8, 9]
-    epsRange = [0.1]
+    kRange = [4, 5, 6, 7, 8, 9, 10]
+    epsRange = [1]
     epochs = 3
 
     for parameter in synParameters:
+        print(parameter[0])
         plt.close('all')
         data = pd.read_csv(parameter[0], header=None)
         # result = dbscan.dbscan(data, 2, parameter[1], parameter[2])
@@ -55,7 +60,9 @@ def main():
         print(puri)
         sill = assessment.silhouettecofficient(result, 4, 2)
         print(sill[0])
-        result = result.sort_values(3)
+        # result = result.sort_values(len(result.columns) - 1, ascending=False)
+        # result = result.sort_values(3)
+        result = result.sort_values([3, len(result.columns) - 1], ascending=(True, False))
         result = result.reset_index(drop=True)
         # print(result.head())
         plt.figure()
@@ -65,13 +72,9 @@ def main():
         plt.savefig(plotname, dpi=300)
         index = index + 1
 
-
-#
-#
-#
 # ('Synthetic_300S_63N.csv',16,3),('Synthetic_400S_63N.csv',16,3),('Synthetic_500S_0N.csv',16,3),('Synthetic_500S_34N.csv',16,3),('Synthetic_500S_66N.csv',16,3),('Synthetic_500S_82N.csv',16,3) ,('Synthetic_500S_99N.csv',16,3) ,('Synthetic_600S_99N.csv',16,3) ,('Synthetic_700S_179N.csv',16,3)
-def clusterDetatails(data, gtlabel, clabel, eps, minpts):
-    print("radius: " + str(eps) + " min points: " + str(minpts))
+def clusterDetatails(data, gtlabel, clabel, Kcluster, eps):
+    print("clusters: " + str(Kcluster) + " epsilon: " + str(eps))
     labels = data[clabel - 1].unique()
     glabels = data[gtlabel - 1].unique()
     count = 0
